@@ -1,4 +1,4 @@
-import { productSidebar } from "./selectors";
+import { productSidebar, recordGroup } from "./selectors";
 
 export const manageInventoryBtnHandler = () => {
    console.log("show sidebar");
@@ -12,6 +12,12 @@ export const closeSidebarBtnHandler = () => {
 }
 
 export const checkoutHandler = () => {
-   console.log(checkout);
-   window.print();
+   // console.log(recordGroup);
+   const productList = document.querySelectorAll(".record-row");
+   // console.log(productList.length);
+
+   if(productList.length>0){
+      console.log(checkout);
+      window.print();
+   }
 }
