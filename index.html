@@ -1,15 +1,213 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <main id="app">
-      
-    </main>
-    <script type="module" src="./main.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice App</title>
+</head>
+
+<body>
+
+  <main id="app" class="flex flex-col h-screen bg-stone-50 text-stone-800 dark:bg-stone-800 dark:text-stone-50">
+
+    <header class="mb-5">
+      <div class="container mx-auto">
+        <div class="p-4">
+          <h1 class="font-san font-bold text-3xl">MMS Solutions</h1>
+          <h3 class="text-stone-500">Invoice App</h3>
+        </div>
+      </div>
+    </header>
+
+    <section class="">
+      <div class="container mx-auto mb-5 print:hidden">
+        <form action="" id="createRecordForm">
+          <div class="grid grid-cols-4 gap-3 p-5 bg-stone-200 dark:bg-stone-700 border-2 border-stone-200 rounded-lg">
+            <div class="col-span-2">
+              <select id="productSelect" name="product_select" required
+                class="bg-stone-50 border-2 border-stone-300 text-stone-800 text-sm rounded-lg w-full px-3 py-2 dark:bg-stone-800 dark:border-stone-600 dark:placeholder-stone-400 dark:text-stone-50 focus:ring-stone-500 focus:border-stone-500">
+                <option value="" selected>Select Product</option>
+              </select>
+            </div>
+            <div class="col-span-1">
+              <input type="Number" id="quantity" name="quantity"
+                class="bg-stone-50 border-2 border-stone-300 text-stone-800 text-sm rounded-lg w-full px-3 py-2 dark:bg-stone-800 dark:border-stone-600 dark:placeholder-stone-400 dark:placeholder:text-stone-50 focus:ring-stone-500 focus:border-stone-500"
+                placeholder="Quantity" required />
+            </div>
+            <div class="col-span-1">
+              <button type="submit"
+                class="text-stone-50 bg-stone-800 border-2 border-stone-800 active:scale-90 rounded-lg text-sm w-full sm:w-auto px-3 py-2 text-center dark:bg-stone-800 dark:text-stone-50">
+                Add Record
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="container mx-auto">
+        <div class="relative overflow-x-auto shadow-md">
+          <table class="w-full text-sm text-left rtl:text-right text-stone-700 dark:text-stone-100">
+            <thead class="text-xs text-stone-50 bg-stone-800 dark:bg-stone-700 dark:text-stone-200 uppercase">
+              <tr>
+                <th scope="col" class="px-6 py-3 font-medium">
+                  Product
+                </th>
+                <th scope="col" class="px-6 py-3 text-end">
+                  Price
+                </th>
+                <th scope="col" class="px-6 py-3 text-end">
+                  Quantity
+                </th>
+                <th scope="col" class="px-6 py-3 text-end">
+                  Cost
+                </th>
+                <th scope="col" class="px-6 py-3 text-end table-cell print:hidden">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody id="recordGroup">
+              <tr class="hidden last:table-row bg-stone-50 border-b dark:bg-stone-800 dark:border-stone-700">
+                <td class="px-6 py-4 text-center" colspan="4">
+                  There is no record yet
+                </td>
+                <td class="px-6 py-4 table-cell print:hidden">
+                  
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="bg-stone-300 border-b dark:bg-stone-800 dark:border-stone-700">
+                <th colspan="3" class="px-6 py-2 text-end">
+                  Total
+                </th>
+                <th id="recordTotal" class="px-6 py-2 text-end">
+                  0
+                </th>
+                <th class="table-cell print:hidden"></th>
+              </tr>
+              <tr class="bg-stone-300 border-b dark:bg-stone-800 dark:border-stone-700">
+                <th colspan="3" class="px-6 py-2 text-end">
+                  Tax
+                </th>
+                <th id="recordTax" class="px-6 py-2 text-end">
+                  0
+                </th>
+                <th class="table-cell print:hidden"></th>
+              </tr>
+              <tr class="bg-stone-300 border-b dark:bg-stone-800 dark:border-stone-700">
+                <th colspan="3" class="px-6 py-2 text-end">
+                  Net Total
+                </th>
+                <th id="recordNetTotal" class="px-6 py-2 text-end">
+                  0
+                </th>
+                <th class="table-cell print:hidden"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <p class="hidden print:block mt-5 font-bold">ဝယ်ယူအားပေးမှုအတွက် MMS IT မိသားစုမှ ကျေးဇူးအထူးတင်ပါတယ်။</p>
+      </div>
+    </section>
+
+    <section id="productSidebar" class="fixed right-0 w-[450px] h-screen bg-stone-50 shadow translate-x-full">
+      <div class="p-4">
+        <div class="flex justify-between items-center mb-5">
+          <div class="">
+            <h1 class="font-san font-bold text-3xl">Manage Inventory</h1>
+            <p class="text-stone-500">Available Items</p>
+          </div>
+          <div>
+            <button id="closeSidebarBtn"><i class="fa-solid fa-xmark text-3xl pointer-events-none"></i></button>
+          </div>
+        </div>
+        <div class="p-3 bg-stone-200 dark:bg-stone-700 border-2 border-stone-200 rounded-lg mb-5">
+          <form action="" id="productCreateForm">
+            <div class="grid grid-cols-3 grid-rows-2 gap-3">
+              <div class="col-span-3">
+                <input type="text" id="newProductName" name="new_product_name"
+                  class="bg-stone-50 border-2 border-stone-300 text-stone-800 text-sm rounded-lg w-full px-3 py-2 dark:bg-stone-800 dark:border-stone-600 dark:placeholder-stone-400 dark:text-stone-50 focus:ring-stone-500 focus:border-stone-500"
+                  placeholder="New Product Name" required />
+              </div>
+              <div class="col-span-2">
+                <input type="Number" id="newProductPrice" name="new_product_price"
+                  class="bg-stone-50 border-2 border-stone-300 text-stone-800 text-sm rounded-lg w-full px-3 py-2 dark:bg-stone-800 dark:border-stone-600 dark:placeholder-stone-400 dark:text-stone-50 focus:ring-stone-500 focus:border-stone-500"
+                  placeholder="Price" required />
+              </div>
+              <div class="col-span-1">
+                <button type="button" id="addNewProductBtn"
+                  class="text-stone-50 active:scale-90 bg-stone-800 border-2 border-stone-800 font-medium rounded-lg text-sm w-full px-3 py-2 text-center dark:bg-stone-50 dark:text-stone-800">
+                  Add New
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div id="productGroup" class="flex flex-col gap-3">
+
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-auto print:hidden">
+      <div class="container mx-auto py-3">
+        <div class="flex justify-end gap-3">
+          <button type="button" id="manageInventoryBtn"
+            class="text-stone-800 active:scale-90 bg-stone-50 border-2 border-stone-800 font-medium rounded-lg text-xs w-full sm:w-auto px-3 py-2 text-center dark:bg-stone-200 dark:text-stone-900">
+            Manage Inventory
+          </button>
+          <button type="button" id="checkout"
+            class="text-stone-50 active:scale-90 bg-stone-800 border-2 border-stone-800 font-medium rounded-lg text-xs w-full sm:w-auto px-3 py-2 text-center dark:bg-stone-50 dark:text-stone-900">
+            Checkout
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <template id="productCardTemplate">
+      <div class="product-card border border-stone-600 rounded-lg p-3 flex justify-between">
+        <h3 class="product-name">Apple</h3>
+        <p class="text-stone-500"><span class="product-price"></span> MMK</p>
+      </div>
+    </template>
+    <template id="recordRowTemplate">
+      <tr class="record-row group bg-stone-50 border-b hover:bg-stone-100 dark:bg-stone-800 dark:border-stone-700">
+        <td scope="row"
+          class="record-product-name px-6 py-4 text-stone-900 whitespace-nowrap dark:text-stone-50">
+          Apple
+        </td>
+        <td class="record-product-price px-6 py-4 text-end">
+          500
+        </td>
+        <td class="px-5 py-3 text-end">
+          <div class="">
+            <button class="quantity-sub hidden group-hover:inline-block active:scale-90">
+              <i class="fa-solid fa-minus p-1 text-xs bg-stone-600 text-stone-50 rounded-full pointer-events-none"></i>
+            </button>
+            <span class="record-product-quantity inline-block w-5">2</span>
+            <button class="quantity-add hidden group-hover:inline-block active:scale-90">
+              <i class="fa-solid fa-plus p-1 text-xs bg-stone-600 text-stone-50 rounded-full pointer-events-none"></i>
+            </button>
+          </div>
+        </td>
+        <td class="record-product-cost px-6 py-4 text-end">
+          1000
+        </td>
+        <td class="px-6 py-3 text-end underline table-cell print:hidden">
+          <button type="button"
+            class="record-remove active:scale-90 text-stone-50 bg-stone-800 border-2 border-stone-800 font-medium rounded-lg text-xs w-full sm:w-auto px-2 py-1 text-center dark:bg-stone-50 dark:text-stone-800">
+            Remove
+          </button>
+        </td>
+      </tr>
+    </template>
+
+  </main>
+
+  <script type="module" src="/main.js"></script>
+  <!-- <script src="../path/to/flowbite/dist/flowbite.min.js"></script> -->
+</body>
+
 </html>
